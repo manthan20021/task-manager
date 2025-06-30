@@ -15,7 +15,7 @@ const taskRouter = require('./router/taskRouter');
 const user = require('./router/userRouter');
 
 //routes
-app.use('/',authentication, taskRouter)
+app.use('/', taskRouter)
 app.use('/', user)
 
 PORT = process.env.PORT || 3000;

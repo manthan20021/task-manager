@@ -1,6 +1,7 @@
 const passport = require('passport');
 const LocalStrategy = require("passport-local");
 const person = require('./models/user.model')
+require('./models/user.model').comperPassword
 
 passport.use(
     new LocalStrategy(async (username, password, done)=>{
@@ -11,7 +12,7 @@ passport.use(
     if(!user) done(null, false, {message: "incorect username"}) //done tacks a 3 param (error, user, info)
 
         //compering password witch is given by user and withc is stored in DB
-        const isPasswordMatchd = user.password === password ? true : false
+        const isPasswordMatchd = user.comperPassword(password)
         if(isPasswordMatchd){
             done(null, user);
         }
