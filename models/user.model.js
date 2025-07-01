@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const passport = require("passport");
+
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -24,32 +24,31 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-UserSchema.pre("save", async (next) => {
+UserSchema.pre("save", async function(next){
   //wher to store
   const user = this;
   //only incrypt password when user is updating or modifiding password
-  if (!user.isModifide("password")) return next();
+  if (!user.isModified('password')) return next();
   try {
-    //creating salt
-    const salt = await bcrypt.genSalt(10);
     //hashing password
-    const hashedPassword = bcrypt.hash(user.password, salt);
+    const hashedPassword = await bcrypt.hash(user.password, 10);
     //replesing password with hashedPassword
-    user.passport = hashedPassword;
+    user.password = hashedPassword;
     next();
   } catch (error) {
     next(error);
   }
 });
 
-UserSchema.method.comperPassword = async function(candidetPassword){
+UserSchema.methods.comperPassword = async function(password){
+  let user = this
   try {
-    const isMatchd = await bcrypt.compare(candidetPassword, this.password)
+    const isMatchd = await bcrypt.compare(password, user.password)
     return isMatchd
   } catch (error) {
     throw error
   }
 }
 
-const user = mongoose.model("user", UserSchema);
-module.exports = user;
+const User = mongoose.model("user", UserSchema);
+module.exports = User;

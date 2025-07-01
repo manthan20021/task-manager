@@ -16,6 +16,8 @@ router.post('/user', async (req, res) => {
             message: "internal server error",
             error: error
         })
+        console.log(error);
+        
     }
 });
 

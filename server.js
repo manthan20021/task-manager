@@ -15,8 +15,8 @@ const taskRouter = require('./router/taskRouter');
 const user = require('./router/userRouter');
 
 //routes
-app.use('/', taskRouter)
-app.use('/', user)
+app.use('/', authentication, taskRouter)
+app.use('/',user)
 
 PORT = process.env.PORT || 3000;
 dbConnect().then(
